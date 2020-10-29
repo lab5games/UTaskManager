@@ -60,7 +60,7 @@ namespace Lab5Games
 
         public UTask(IEnumerator task)
         {
-            if (_task == null)
+            if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
             _task = task;
