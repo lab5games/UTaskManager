@@ -11,10 +11,16 @@ namespace Lab5Games
 
         private static UTaskManager _instance = null;
 
-        public static UTaskManager instance
+        public static UTaskManager Instance
         {
             get
             {
+                if(_quit)
+                {
+                    Debug.LogWarning("The application is quit.");
+                    return null;
+                }
+
                 if(_instance == null)
                 {
                     _instance = FindObjectOfType<UTaskManager>();
@@ -39,7 +45,7 @@ namespace Lab5Games
                 return;
             }
 
-            instance.AddTask(task);
+            Instance.AddTask(task);
         }
 
         private void AddTask(UTask task)
@@ -58,6 +64,13 @@ namespace Lab5Games
         private void OnDestroy()
         {
             _instance = null;
+        }
+
+        private static bool _quit = false;
+
+        private void OnApplicationQuit()
+        {
+            _quit = true;   
         }
     }
 }
