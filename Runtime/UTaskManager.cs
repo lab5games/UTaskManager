@@ -7,23 +7,20 @@ namespace Lab5Games
     {
         private float _dt;
 
-        private List<UTask> _uTasks = new List<UTask>();
-        private List<UTimer> _uTimers = new List<UTimer>();
-        private List<UTimer> _removedTimers = new List<UTimer>();
+        private List<UTask> _uTasks = new List<UTask>(32);
+        private List<UTimer> _uTimers = new List<UTimer>(64);
+
+        public int UTaskCount => _uTasks.Count;
+        public int UTimerCount => _uTimers.Count;
 
         internal static void RunTask(UTask newTask)
         {
             Instance.StartCoroutine(newTask.Routine());
 
-            if(!Instance._uTasks.Contains(newTask))
+            if (!Instance._uTasks.Contains(newTask))
             {
                 Instance._uTasks.Add(newTask);
             }
-        }
-
-        internal static void RemoveTask(UTask uTask)
-        {
-            Instance._uTasks.Remove(uTask);
         }
 
         internal static void RunTask(UTimer timer)
@@ -34,29 +31,39 @@ namespace Lab5Games
             }
         }
 
-        internal static void RemoveTask(UTimer timer)
-        {
-            Instance._removedTimers.Add(timer);
-        }
-
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnEnable()
+        {
+            _uTasks.Clear();
+            _uTimers.Clear();
         }
 
         private void Update()
         {
             _dt = Time.deltaTime;
 
-            for(int i=0; i<_uTimers.Count; i++)
+            for(int i=_uTasks.Count-1; i>=0; i--)
             {
-                _uTimers[i].Tick(_dt);
+                if(_uTasks[i].State == ETaskState.Finished ||
+                    _uTasks[i].State == ETaskState.Stopped)
+                {
+                    _uTasks.RemoveAt(i);
+                }
             }
 
-            while(_removedTimers.Count > 0)
+            for(int i=_uTimers.Count-1; i>=0; i--)
             {
-                _uTimers.Remove(_removedTimers[0]);
-                _removedTimers.RemoveAt(0);
+                _uTimers[i].Tick(_dt);
+
+                if(_uTimers[i].State == ETaskState.Finished || 
+                    _uTimers[i].State == ETaskState.Stopped)
+                {
+                    _uTimers.RemoveAt(i);
+                }
             }
         }
     }

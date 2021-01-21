@@ -14,10 +14,9 @@ namespace Lab5Games
 
     public class UTask
     {
-        public static UTask CreateTask(IEnumerator task, Action<UTask> action, bool autoStart = true, bool autoRemove = true)
+        public static UTask CreateTask(IEnumerator task, Action<UTask> action, bool autoStart = true)
         {
             UTask newTask = new UTask(task, action);
-            newTask.autoRemove = autoRemove;
 
             if(autoStart)
             {
@@ -27,15 +26,8 @@ namespace Lab5Games
             return newTask;
         }
 
-        public static void Remove(UTask task)
-        {
-            UTaskManager.RemoveTask(task);
-        }
-
         private IEnumerator _task;
         private Action<UTask> _action;
-
-        public bool autoRemove = false;
 
         private ETaskState _state = ETaskState.Ready;
 
@@ -50,15 +42,6 @@ namespace Lab5Games
                 if (_state == ETaskState.Finished || _state == ETaskState.Stopped)
                 {
                     _action.Invoke(this);
-
-                    if (autoRemove)
-                    {
-                        Remove(this);
-                    }
-                    else
-                    {
-                        _state = ETaskState.Ready;
-                    }
                 }
             }
         }

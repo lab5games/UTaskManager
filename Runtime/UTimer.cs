@@ -4,11 +4,10 @@ namespace Lab5Games
 {
     public class UTimer
     {
-        public static UTimer CreateTask(Action<UTimer> action, float timer, bool autoStart = true, bool autoRemove = true)
+        public static UTimer CreateTask(Action<UTimer> action, float timer, bool autoStart = true)
         {
             UTimer newTask =  new UTimer(action, timer);
-            newTask.autoRemove = autoRemove;
-            
+
             if(autoStart)
             {
                 newTask.Start();
@@ -17,15 +16,8 @@ namespace Lab5Games
             return newTask;
         }
 
-        public static void Remove(UTimer timer)
-        {
-            UTaskManager.RemoveTask(timer);
-        }
-
         private Action<UTimer> _action;
         private float _timer;
-
-        public bool autoRemove = false;
 
         private ETaskState _state = ETaskState.Ready;
 
@@ -40,15 +32,6 @@ namespace Lab5Games
                 if(_state == ETaskState.Finished || _state == ETaskState.Stopped)
                 {
                     _action.Invoke(this);
-
-                    if (autoRemove)
-                    {
-                        Remove(this);
-                    }
-                    else
-                    {
-                        _state = ETaskState.Ready;
-                    }
                 }
             }
         }
