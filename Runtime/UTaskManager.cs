@@ -8,8 +8,8 @@ namespace Lab5Games
         private float _dt;
 
         private List<UTask> _uTasks = new List<UTask>();
-        private List<UTimerTask> _uTimers = new List<UTimerTask>();
-        private List<UTimerTask> _removedTimers = new List<UTimerTask>();
+        private List<UTimer> _uTimers = new List<UTimer>();
+        private List<UTimer> _removedTimers = new List<UTimer>();
 
         internal static void RunTask(UTask newTask)
         {
@@ -26,17 +26,17 @@ namespace Lab5Games
             Instance._uTasks.Remove(uTask);
         }
 
-        internal static void RunTask(UTimerTask newTask)
+        internal static void RunTask(UTimer timer)
         {
-            if(!Instance._uTimers.Contains(newTask))
+            if(!Instance._uTimers.Contains(timer))
             {
-                Instance._uTimers.Add(newTask);
+                Instance._uTimers.Add(timer);
             }
         }
 
-        internal static void RemoveTask(UTimerTask timerTask)
+        internal static void RemoveTask(UTimer timer)
         {
-            Instance._removedTimers.Add(timerTask);
+            Instance._removedTimers.Add(timer);
         }
 
         private void Awake()
