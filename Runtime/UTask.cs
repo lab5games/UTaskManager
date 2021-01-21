@@ -14,7 +14,7 @@ namespace Lab5Games
 
     public class UTask
     {
-        public static UTask CreateTask(IEnumerator task, Action<UTask> action, bool autoStart = true)
+        public static UTask CreateTask(IEnumerator task, Action<UTask> action = null, bool autoStart = true)
         {
             UTask newTask = new UTask(task, action);
 
@@ -41,7 +41,7 @@ namespace Lab5Games
 
                 if (_state == ETaskState.Finished || _state == ETaskState.Stopped)
                 {
-                    _action.Invoke(this);
+                    _action?.Invoke(this);
                 }
             }
         }
