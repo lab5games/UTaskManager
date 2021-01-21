@@ -1,24 +1,14 @@
 ﻿using System;
-using System.Collections;
 
 namespace Lab5Games
 {
-    public enum ETaskState
+    public class UTimerTask
     {
-        Ready,
-        Stopped,
-        Finished,
-        Running,
-        Paused
-    }
-
-    public class UTask
-    {
-        public static UTask CreateTask(IEnumerator task, Action<UTask> action, bool autoStart = true, bool autoRemove = true)
+        public static UTimerTask CreateTask(Action<UTimerTask> action, float timer, bool autoStart = true, bool autoRemove = true)
         {
-            UTask newTask = new UTask(task, action);
+            UTimerTask newTask =  new UTimerTask(action, timer);
             newTask.autoRemove = autoRemove;
-
+            
             if(autoStart)
             {
                 newTask.Start();
@@ -27,13 +17,13 @@ namespace Lab5Games
             return newTask;
         }
 
-        public static void Remove(UTask task)
+        public static void Remove(UTimerTask task)
         {
             UTaskManager.RemoveTask(task);
         }
 
-        private IEnumerator _task;
-        private Action<UTask> _action;
+        private Action<UTimerTask> _action;
+        private float _timer;
 
         public bool autoRemove = false;
 
@@ -47,7 +37,7 @@ namespace Lab5Games
             {
                 _state = value;
 
-                if (_state == ETaskState.Finished || _state == ETaskState.Stopped)
+                if(_state == ETaskState.Finished || _state == ETaskState.Stopped)
                 {
                     _action.Invoke(this);
 
@@ -62,10 +52,10 @@ namespace Lab5Games
                 }
             }
         }
-
+        
         public void Start()
         {
-            if (State == ETaskState.Ready)
+            if(State == ETaskState.Ready)
             {
                 State = ETaskState.Running;
 
@@ -75,7 +65,7 @@ namespace Lab5Games
 
         public void Stop()
         {
-            if (State == ETaskState.Running)
+            if(State == ETaskState.Running)
             {
                 State = ETaskState.Stopped;
             }
@@ -83,7 +73,7 @@ namespace Lab5Games
 
         public void Pause()
         {
-            if (State == ETaskState.Running)
+            if(State == ETaskState.Running)
             {
                 State = ETaskState.Paused;
             }
@@ -91,36 +81,27 @@ namespace Lab5Games
 
         public void UnPause()
         {
-            if (State == ETaskState.Paused)
+            if(State == ETaskState.Paused)
             {
                 State = ETaskState.Running;
             }
         }
 
-        private UTask(IEnumerator task, Action<UTask> action)
+        private UTimerTask(Action<UTimerTask> action, float timer)
         {
-            _task = task;
             _action = action;
+            _timer = timer;
         }
 
-        internal IEnumerator Routine()
+        internal void Tick(float deltaTime)
         {
-            while(State > ETaskState.Finished)
+            if(State == ETaskState.Running)
             {
-                if(State == ETaskState.Paused)
+                _timer -= deltaTime;
+
+                if(_timer < 0)
                 {
-                    yield return Yielders.EndOfFrame;
-                }
-                else
-                {
-                    if(_task != null && _task.MoveNext())
-                    {
-                        yield return _task.Current;
-                    }
-                    else
-                    {
-                        State = ETaskState.Finished;
-                    }
+                    State = ETaskState.Finished;
                 }
             }
         }
