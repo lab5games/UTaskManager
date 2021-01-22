@@ -30,6 +30,14 @@ namespace Lab5Games
                 Instance._uTimers.Add(timer);
             }
         }
+        
+        public static void Cleanup()
+        {
+            Instance.StopAllCoroutines();
+
+            Instance._uTasks.Clear();
+            Instance._uTimers.Clear();
+        }
 
         private void Awake()
         {
@@ -38,8 +46,7 @@ namespace Lab5Games
 
         private void OnEnable()
         {
-            _uTasks.Clear();
-            _uTimers.Clear();
+            Cleanup();
         }
 
         private void Update()
