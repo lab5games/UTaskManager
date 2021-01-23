@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lab5Games
+namespace Lab5Games.Task
 {
     public class UTimer
     {

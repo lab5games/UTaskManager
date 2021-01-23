@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace Lab5Games
+namespace Lab5Games.Task
 {
     public enum ETaskState
     {

@@ -1,11 +1,15 @@
 {
     "name": "com.lab5games.utaskmanager",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "displayName": "UTask Manager",
     "unity": "2019.4",
     
     "repository": {
         "type": "git",
         "url": "https://github.com/lab5games/UTaskManager.git"
+    },
+
+    "dependencies": {
+        "com.lab5games.lab5gameskit" : "1.2.0"
     }
  }

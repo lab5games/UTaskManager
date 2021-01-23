@@ -2,7 +2,7 @@
 using UnityEngine.Assertions.Comparers;
 using System.Collections.Generic;
 
-namespace Lab5Games
+namespace Lab5Games.Task
 {
     public static class Yielders
     {
