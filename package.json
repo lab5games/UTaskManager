@@ -10,6 +10,6 @@
     },
 
     "dependencies": {
-        "com.lab5games.lab5gameskit" : "1.2.0"
+        "com.lab5games.lab5gameskit" : "1.2.4"
     }
  }
